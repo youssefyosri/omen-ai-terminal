@@ -1,0 +1,12 @@
+{
+  "@@locale": "ar",
+  "terminalTitle": "أومن // الوحدة الطرفية",
+  "viewArchive": "عرض الأرشيف",
+  "awaitingDirective": "بانتظار التوجيه...",
+  "generate": "توليد",
+  "archiveTitle": "أومن // الأرشيف",
+  "purgeArchive": "تطهير الأرشيف",
+  "archiveEmpty": "الأرشيف فارغ",
+  "directivePrefix": "> التوجيه:",
+  "outputTitle": "أومن // المخرجات"
+}

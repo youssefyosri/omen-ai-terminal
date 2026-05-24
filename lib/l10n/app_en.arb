@@ -1,0 +1,12 @@
+{
+  "@@locale": "en",
+  "terminalTitle": "OMEN // TERMINAL",
+  "viewArchive": "View Archive",
+  "awaitingDirective": "AWAITING DIRECTIVE...",
+  "generate": "GENERATE",
+  "archiveTitle": "OMEN // ARCHIVE",
+  "purgeArchive": "Purge Archive",
+  "archiveEmpty": "ARCHIVE EMPTY",
+  "directivePrefix": "> DIRECTIVE:",
+  "outputTitle": "OMEN // OUTPUT"
+}
