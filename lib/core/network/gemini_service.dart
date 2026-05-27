@@ -1,40 +1,29 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 
 class GeminiService {
-  final Dio _dio;
+  late final GenerativeModel _model;
 
-  GeminiService() : _dio = Dio(BaseOptions(
-    baseUrl: 'https://generativelanguage.googleapis.com/v1beta/models/',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-goog-api-key': dotenv.env["GEMINI_API_KEY"] ?? "KEY_NOT_FOUND",
-    },
-  ));
+  GeminiService() {
+    final apiKey = dotenv.env["GEMINI_API_KEY"] ?? "KEY_NOT_FOUND";
 
-  Future<String> generateText(String prompt) async {
+    _model = GenerativeModel(
+      model: 'gemini-2.5-flash',
+      apiKey: apiKey,
+      systemInstruction: Content.system("You are OMEN, a highly analytical, brutalist AI assistant. Keep responses concise, formatting them clearly in markdown. Do not use friendly pleasantries and answer in the same language as the question."),
+    );
+  }
+
+  Stream<String> generateTextStream(String prompt) async* {
     try {
-      final response = await _dio.post(
-        'gemini-flash-latest:generateContent',
-        data: {
-          "contents": [
-            {
-              "parts": [
-                {
-                  "text": "You are OMEN, a highly analytical, brutalist AI assistant. Keep responses concise, formatting them clearly in markdown. Do not use friendly pleasantries and answer in the same language as the question. Answer the following: $prompt"
-                }
-              ]
-            }
-          ]
-        },
-      );
+      final stream = _model.generateContentStream([Content.text(prompt)]);
 
-      final String generatedText = response.data['candidates'][0]['content']['parts'][0]['text'];
-      return generatedText;
-
-    } on DioException catch (e) {
-      throw Exception('UPLINK FAILED: ${e.message}');
+      await for (final chunk in stream) {
+        if (chunk.text != null) {
+          yield chunk.text!;
+        }
+      }
     } catch (e) {
       throw Exception('SYSTEM ERROR: $e');
     }

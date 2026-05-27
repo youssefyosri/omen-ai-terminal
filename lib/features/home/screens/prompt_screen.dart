@@ -60,37 +60,20 @@ class _PromptScreenState extends ConsumerState<PromptScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Dynamic Button[cite: 5]
               SizedBox(
                 height: 64,
                 child: ElevatedButton(
-                  onPressed: aiState.isLoading ? null : () async {
+                  onPressed: aiState.isLoading ? null : () {
                     final text = _promptController.text.trim();
                     if (text.isEmpty) return;
 
                     FocusScope.of(context).unfocus();
 
-                    await ref.read(aiProvider.notifier).sendDirective(text);
+                    ref.read(aiProvider.notifier).sendDirective(text);
 
-                    if (context.mounted) {
-                      final currentState = ref.read(aiProvider);
+                    context.push('/result');
 
-                      currentState.when(
-                        data: (result) {
-                          if (result != null) {
-                            ref.read(historyProvider.notifier).saveRecord(text, result);
-                            context.push('/result', extra: result);
-                            _promptController.clear();
-                          }
-                        },
-                        error: (err, stack) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(err.toString())),
-                          );
-                        },
-                        loading: () {},
-                      );
-                    }
+                    _promptController.clear();
                   },
                   child: aiState.isLoading
                       ? const CircularProgressIndicator(color: Colors.black)

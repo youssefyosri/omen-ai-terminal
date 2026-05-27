@@ -49,10 +49,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/result',
-        builder: (context, state) {
-          final output = state.extra as String;
-          return ResultScreen(output: output);
-        },
+        builder: (context, state) => const ResultScreen(),
       ),
       GoRoute(
         path: '/history',
